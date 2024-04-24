@@ -227,16 +227,16 @@ async def retry_async(
                     raise InstructorRetryException(
                         e,
                         last_completion=response,
-                        n_attempts=e.attempt_number,
+                        n_attempts=attempt.retry_state.attempt_number,
                         messages=kwargs["messages"],
                         total_usage=total_usage,
                     ) from e
     except RetryError as e:
-        logger.exception(f"Failed after retries: {e.last_attempt.exception}")
+        logger.exception(f"Failed after retries: {attempt.retry_state.outcome}")
         raise InstructorRetryException(
             e,
             last_completion=response,
-            n_attempts=e.attempt_number,
+            n_attempts=attempt.retry_state.attempt_number,
             messages=kwargs["messages"],
             total_usage=total_usage,
         ) from e
